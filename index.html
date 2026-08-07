@@ -1,195 +1,170 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevStore - Catalogo & Pedidos</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --bg: #0d1117;
-            --card: #161b22;
-            --border: #30363d;
-            --text: #c9d1d9;
-            --accent: #58a6ff;
-            --green: #2ea043;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background-color: var(--bg); color: var(--text); padding: 20px; }
-
-        header { text-align: center; margin-bottom: 30px; }
-        header h1 { color: var(--accent); }
-
-        .layout { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; max-width: 1200px; margin: 0 auto; }
-        @media (max-width: 800px) { .layout { grid-template-columns: 1fr; } }
-
-        /* Grade de Produtos */
-        .produtos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .produto-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 15px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
-        .produto-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 6px; margin-bottom: 10px; }
-        .produto-card h3 { font-size: 16px; margin-bottom: 5px; }
-        .produto-card .preco { color: var(--green); font-weight: bold; margin-bottom: 10px; }
-
-        /* Carrinho */
-        .carrinho-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 20px; height: fit-content; }
-        .carrinho-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding: 10px 0; font-size: 14px; }
-
-        /* Inputs e Botões */
-        button { background: var(--accent); color: #fff; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.2s; }
-        button:hover { opacity: 0.9; }
-        .btn-whats { background: var(--green); margin-top: 15px; }
-        
-        input { width: 100%; padding: 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: #fff; margin-top: 10px; }
-    </style>
+    <title>TechFlow Studio | Soluções Digitais</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <header>
-        <h1><i class="fa-solid fa-cart-shopping"></i> DevStore Catalog</h1>
-        <p>Monte seu pedido e envie direto para o WhatsApp</p>
+    <header class="navbar">
+        <div class="logo">Tech<span>Flow</span></div>
+        <nav>
+            <a href="#inicio">Início</a>
+            <a href="#servicos">Serviços</a>
+            <a href="#depoimentos">Depoimentos</a>
+            <a href="#faq">FAQ</a>
+        </nav>
+        <a href="#contato" class="btn-primary">Solicitar Orçamento</a>
     </header>
 
-    <div class="layout">
-        
-        <div>
-            <h2 style="margin-bottom: 15px;">Produtos</h2>
-            <div class="produtos-grid" id="grid-produtos"></div>
+    <section id="inicio" class="hero">
+        <div class="hero-text">
+            <span class="badge">🚀 Inovação & Alta Performance</span>
+            <h1>Acelere o crescimento do seu negócio com <span>tecnologia sob medida</span>.</h1>
+            <p>Criamos plataformas web, aplicativos e marcas que convertem visitantes em clientes fiéis.</p>
+            <div class="hero-btns">
+                <a href="#contato" class="btn-primary">Iniciar Projeto</a>
+                <a href="#servicos" class="btn-secondary">Conhecer Serviços</a>
+            </div>
         </div>
 
-        <div class="carrinho-card">
-            <h2><i class="fa-solid fa-basket-shopping"></i> Seu Carrinho</h2>
-            <div id="itens-carrinho" style="margin-top: 15px;"></div>
-
-            <div style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 15px;">
-                <input type="text" id="cupom-input" placeholder="Cupom de desconto (ex: DEV10)">
-                <button onclick="aplicarCupom()" style="margin-top: 5px; background: var(--border);">Aplicar Cupom</button>
+        <div class="hero-card">
+            <div class="card-header">
+                <span class="status-dot"></span> Online
             </div>
-
-            <div style="margin-top: 20px; font-size: 18px; font-weight: bold;">
-                Total: R$ <span id="total-carrinho">0.00</span>
-                <div id="desconto-tag" style="font-size: 12px; color: var(--green); display: none;">10% de desconto aplicado!</div>
-            </div>
-
-            <button onclick="finalizarPedido()" class="btn-whats">
-                <i class="fa-brands fa-whatsapp"></i> Enviar Pedido no Whats
-            </button>
+            <h3>+250% em Vendas</h3>
+            <p>Média de crescimento dos nossos clientes no primeiro ano pós-lançamento.</p>
         </div>
+    </section>
 
-    </div>
+    <section class="stats">
+        <div class="stat-item">
+            <h2>+50</h2>
+            <p>Projetos Entregues</p>
+        </div>
+        <div class="stat-item">
+            <h2>99.8%</h2>
+            <p>Satisfação de Clientes</p>
+        </div>
+        <div class="stat-item">
+            <h2>5x</h2>
+            <p>Mais Velocidade Web</p>
+        </div>
+    </section>
 
-    <script>
-        const produtos = [
-            { id: 1, nome: "Teclado Mecânico RGB", preco: 150.00, img: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=300" },
-            { id: 2, nome: "Mouse Gamer 10000 DPI", preco: 80.00, img: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=300" },
-            { id: 3, nome: "Headset Surround 7.1", preco: 200.00, img: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=300" },
-            { id: 4, nome: "Mousepad Extra Grande", preco: 45.00, img: "https://images.unsplash.com/photo-1629429408209-1f912961dbd8?w=300" }
-        ];
+    <section id="servicos" class="services">
+        <h2>Nossos <span>Serviços Especializados</span></h2>
+        <p class="subtitle">Tudo o que sua marca precisa para se destacar no mercado digital</p>
 
-        let carrinho = [];
-        let temDesconto = false;
+        <div class="services-grid">
+            <div class="service-card">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                <h3>Design UI/UX Premium</h3>
+                <p>Interfaces atraentes, modernas e totalmente focadas na conversão de usuários.</p>
+            </div>
+            <div class="service-card">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                <h3>Sistemas & Web Apps</h3>
+                <p>Sistemas sob medida com arquitetura escalável e segurança de nível empresarial.</p>
+            </div>
+            <div class="service-card">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+                <h3>Aplicativos Mobile</h3>
+                <p>Aplicativos nativos e híbridos para iOS e Android com navegação fluida.</p>
+            </div>
+            <div class="service-card">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                <h3>Otimização SEO</h3>
+                <p>Colocamos sua marca no topo dos buscadores com estratégias avançadas de SEO.</p>
+            </div>
+        </div>
+    </section>
 
-        function renderProdutos() {
-            const grid = document.getElementById('grid-produtos');
-            grid.innerHTML = '';
-            produtos.forEach(p => {
-                grid.innerHTML += `
-                    <div class="produto-card">
-                        <img src="${p.img}" alt="${p.nome}">
-                        <h3>${p.nome}</h3>
-                        <div class="preco">R$ ${p.preco.toFixed(2)}</div>
-                        <button onclick="adicionarAoCarrinho(${p.id})">Adicionar</button>
+    <section id="depoimentos" class="testimonials">
+        <h2>O que nossos <span>clientes dizem</span></h2>
+        <p class="subtitle">Depoimentos reais de quem confiou na TechFlow</p>
+
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <p>"A TechFlow reformulou totalmente nossa plataforma. As conversões aumentaram em 180% no primeiro mês!"</p>
+                <div class="client-info">
+                    <div class="avatar">RC</div>
+                    <div>
+                        <h4>Ricardo Costa</h4>
+                        <span>CEO - FinTech Brasil</span>
                     </div>
-                `;
-            });
-        }
-
-        function adicionarAoCarrinho(id) {
-            const prod = produtos.find(p => p.id === id);
-            const item = carrinho.find(c => c.id === id);
-
-            if (item) {
-                item.qtd++;
-            } else {
-                carrinho.push({ ...prod, qtd: 1 });
-            }
-            renderCarrinho();
-        }
-
-        function alterarQtd(id, delta) {
-            const item = carrinho.find(c => c.id === id);
-            if (item) {
-                item.qtd += delta;
-                if (item.qtd <= 0) {
-                    carrinho = carrinho.filter(c => c.id !== id);
-                }
-            }
-            renderCarrinho();
-        }
-
-        function aplicarCupom() {
-            const cupom = document.getElementById('cupom-input').value.trim().toUpperCase();
-            if (cupom === 'DEV10') {
-                temDesconto = true;
-                document.getElementById('desconto-tag').style.display = 'block';
-            } else {
-                alert('Cupom inválido! Tente "DEV10"');
-            }
-            renderCarrinho();
-        }
-
-        function renderCarrinho() {
-            const container = document.getElementById('itens-carrinho');
-            container.innerHTML = '';
-            let total = 0;
-
-            if (carrinho.length === 0) {
-                container.innerHTML = '<p style="color: #8b949e; text-align: center;">Carrinho vazio.</p>';
-            }
-
-            carrinho.forEach(item => {
-                const subtotal = item.preco * item.qtd;
-                total += subtotal;
-                container.innerHTML += `
-                    <div class="carrinho-item">
-                        <div>
-                            <strong>${item.nome}</strong><br>
-                            <small>R$ ${item.preco.toFixed(2)} x ${item.qtd}</small>
-                        </div>
-                        <div style="display: flex; gap: 5px; align-items: center;">
-                            <button onclick="alterarQtd(${item.id}, -1)" style="padding: 2px 6px; width: auto; background: var(--border);">-</button>
-                            <span>${item.qtd}</span>
-                            <button onclick="alterarQtd(${item.id}, 1)" style="padding: 2px 6px; width: auto; background: var(--border);">+</button>
-                        </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p>"Incrível atenção aos detalhes e entrega no prazo. É o parceiro de tecnologia que todo negócio sonha ter."</p>
+                <div class="client-info">
+                    <div class="avatar">MA</div>
+                    <div>
+                        <h4>Mariana Almeida</h4>
+                        <span>Diretora de Marketing - E-comm Group</span>
                     </div>
-                `;
-            });
+                </div>
+            </div>
+        </div>
+    </section>
 
-            if (temDesconto) total = total * 0.9;
-            document.getElementById('total-carrinho').innerText = total.toFixed(2);
-        }
+    <section id="faq" class="faq">
+        <h2>Perguntas <span>Frequentes</span></h2>
+        <p class="subtitle">Tire suas dúvidas sobre nosso processo de trabalho</p>
 
-        function finalizarPedido() {
-            if (carrinho.length === 0) {
-                alert("Seu carrinho está vazio!");
-                return;
-            }
+        <div class="faq-container">
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>Quanto tempo leva para desenvolver um site?</span>
+                    <span class="arrow">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <p>O prazo varia de acordo com a complexidade do projeto. Landing pages costumam levar entre 5 e 10 dias úteis, enquanto sistemas mais complexos podem levar de 3 a 6 semanas.</p>
+                </div>
+            </div>
 
-            let texto = "🛒 *NOVO PEDIDO - DEVSTORE*\n\n";
-            carrinho.forEach(i => {
-                texto += `• ${i.qtd}x ${i.nome} - R$ ${(i.preco * i.qtd).toFixed(2)}\n`;
-            });
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>Vocês oferecem suporte pós-lançamento?</span>
+                    <span class="arrow">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Sim! Oferecemos 30 dias de suporte gratuito e planos de manutenção contínua para manter seu projeto atualizado e seguro.</p>
+                </div>
+            </div>
 
-            const total = document.getElementById('total-carrinho').innerText;
-            texto += `\n*Total do Pedido:* R$ ${total}`;
-            if (temDesconto) texto += " (Cupom DEV10 aplicado)";
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>O site funciona em celulares e tablets?</span>
+                    <span class="arrow">▼</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Com certeza. Todos os nossos projetos são 100% responsivos e otimizados para qualquer tamanho de tela.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-            const fone = "5535999998888"; // Número fictício da loja
-            window.open(`https://wa.me/${fone}?text=${encodeURIComponent(texto)}`, '_blank');
-        }
+    <section id="contato" class="contact">
+        <div class="contact-box">
+            <h2>Vamos criar algo <span>incrível juntos?</span></h2>
+            <p>Preencha o formulário e receba uma proposta personalizada em até 24h.</p>
+            
+            <form id="contactForm" class="contact-form">
+                <input type="text" placeholder="Seu Nome Completo" required>
+                <input type="email" placeholder="Seu Melhor E-mail" required>
+                <textarea placeholder="Conte um pouco sobre o seu projeto..." rows="4" required></textarea>
+                <button type="submit" class="btn-primary">Enviar Mensagem</button>
+            </form>
+        </div>
+    </section>
 
-        renderProdutos();
-        renderCarrinho();
-    </script>
+    <footer>
+        <p>&copy; 2026 TechFlow Studio. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="scripts.js"></script>
 </body>
 </html>
