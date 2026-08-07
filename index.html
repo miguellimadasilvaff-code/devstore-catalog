@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevStore - Catalogo & Pedidos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #0d1117;
+            --card: #161b22;
+            --border: #30363d;
+            --text: #c9d1d9;
+            --accent: #58a6ff;
+            --green: #2ea043;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: var(--bg); color: var(--text); padding: 20px; }
+
+        header { text-align: center; margin-bottom: 30px; }
+        header h1 { color: var(--accent); }
+
+        .layout { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; max-width: 1200px; margin: 0 auto; }
+        @media (max-width: 800px) { .layout { grid-template-columns: 1fr; } }
+
+        /* Grade de Produtos */
+        .produtos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .produto-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 15px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
+        .produto-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 6px; margin-bottom: 10px; }
+        .produto-card h3 { font-size: 16px; margin-bottom: 5px; }
+        .produto-card .preco { color: var(--green); font-weight: bold; margin-bottom: 10px; }
+
+        /* Carrinho */
+        .carrinho-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 20px; height: fit-content; }
+        .carrinho-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding: 10px 0; font-size: 14px; }
+
+        /* Inputs e Botões */
+        button { background: var(--accent); color: #fff; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.2s; }
+        button:hover { opacity: 0.9; }
+        .btn-whats { background: var(--green); margin-top: 15px; }
+        
+        input { width: 100%; padding: 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: #fff; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1><i class="fa-solid fa-cart-shopping"></i> DevStore Catalog</h1>
+        <p>Monte seu pedido e envie direto para o WhatsApp</p>
+    </header>
+
+    <div class="layout">
+        
+        <div>
+            <h2 style="margin-bottom: 15px;">Produtos</h2>
+            <div class="produtos-grid" id="grid-produtos"></div>
+        </div>
+
+        <div class="carrinho-card">
+            <h2><i class="fa-solid fa-basket-shopping"></i> Seu Carrinho</h2>
+            <div id="itens-carrinho" style="margin-top: 15px;"></div>
+
+            <div style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 15px;">
+                <input type="text" id="cupom-input" placeholder="Cupom de desconto (ex: DEV10)">
+                <button onclick="aplicarCupom()" style="margin-top: 5px; background: var(--border);">Aplicar Cupom</button>
+            </div>
+
+            <div style="margin-top: 20px; font-size: 18px; font-weight: bold;">
+                Total: R$ <span id="total-carrinho">0.00</span>
+                <div id="desconto-tag" style="font-size: 12px; color: var(--green); display: none;">10% de desconto aplicado!</div>
+            </div>
+
+            <button onclick="finalizarPedido()" class="btn-whats">
+                <i class="fa-brands fa-whatsapp"></i> Enviar Pedido no Whats
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        const produtos = [
+            { id: 1, nome: "Teclado Mecânico RGB", preco: 150.00, img: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=300" },
+            { id: 2, nome: "Mouse Gamer 10000 DPI", preco: 80.00, img: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=300" },
+            { id: 3, nome: "Headset Surround 7.1", preco: 200.00, img: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=300" },
+            { id: 4, nome: "Mousepad Extra Grande", preco: 45.00, img: "https://images.unsplash.com/photo-1629429408209-1f912961dbd8?w=300" }
+        ];
+
+        let carrinho = [];
+        let temDesconto = false;
+
+        function renderProdutos() {
+            const grid = document.getElementById('grid-produtos');
+            grid.innerHTML = '';
+            produtos.forEach(p => {
+                grid.innerHTML += `
+                    <div class="produto-card">
+                        <img src="${p.img}" alt="${p.nome}">
+                        <h3>${p.nome}</h3>
+                        <div class="preco">R$ ${p.preco.toFixed(2)}</div>
+                        <button onclick="adicionarAoCarrinho(${p.id})">Adicionar</button>
+                    </div>
+                `;
+            });
+        }
+
+        function adicionarAoCarrinho(id) {
+            const prod = produtos.find(p => p.id === id);
+            const item = carrinho.find(c => c.id === id);
+
+            if (item) {
+                item.qtd++;
+            } else {
+                carrinho.push({ ...prod, qtd: 1 });
+            }
+            renderCarrinho();
+        }
+
+        function alterarQtd(id, delta) {
+            const item = carrinho.find(c => c.id === id);
+            if (item) {
+                item.qtd += delta;
+                if (item.qtd <= 0) {
+                    carrinho = carrinho.filter(c => c.id !== id);
+                }
+            }
+            renderCarrinho();
+        }
+
+        function aplicarCupom() {
+            const cupom = document.getElementById('cupom-input').value.trim().toUpperCase();
+            if (cupom === 'DEV10') {
+                temDesconto = true;
+                document.getElementById('desconto-tag').style.display = 'block';
+            } else {
+                alert('Cupom inválido! Tente "DEV10"');
+            }
+            renderCarrinho();
+        }
+
+        function renderCarrinho() {
+            const container = document.getElementById('itens-carrinho');
+            container.innerHTML = '';
+            let total = 0;
+
+            if (carrinho.length === 0) {
+                container.innerHTML = '<p style="color: #8b949e; text-align: center;">Carrinho vazio.</p>';
+            }
+
+            carrinho.forEach(item => {
+                const subtotal = item.preco * item.qtd;
+                total += subtotal;
+                container.innerHTML += `
+                    <div class="carrinho-item">
+                        <div>
+                            <strong>${item.nome}</strong><br>
+                            <small>R$ ${item.preco.toFixed(2)} x ${item.qtd}</small>
+                        </div>
+                        <div style="display: flex; gap: 5px; align-items: center;">
+                            <button onclick="alterarQtd(${item.id}, -1)" style="padding: 2px 6px; width: auto; background: var(--border);">-</button>
+                            <span>${item.qtd}</span>
+                            <button onclick="alterarQtd(${item.id}, 1)" style="padding: 2px 6px; width: auto; background: var(--border);">+</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            if (temDesconto) total = total * 0.9;
+            document.getElementById('total-carrinho').innerText = total.toFixed(2);
+        }
+
+        function finalizarPedido() {
+            if (carrinho.length === 0) {
+                alert("Seu carrinho está vazio!");
+                return;
+            }
+
+            let texto = "🛒 *NOVO PEDIDO - DEVSTORE*\n\n";
+            carrinho.forEach(i => {
+                texto += `• ${i.qtd}x ${i.nome} - R$ ${(i.preco * i.qtd).toFixed(2)}\n`;
+            });
+
+            const total = document.getElementById('total-carrinho').innerText;
+            texto += `\n*Total do Pedido:* R$ ${total}`;
+            if (temDesconto) texto += " (Cupom DEV10 aplicado)";
+
+            const fone = "5535999998888"; // Número fictício da loja
+            window.open(`https://wa.me/${fone}?text=${encodeURIComponent(texto)}`, '_blank');
+        }
+
+        renderProdutos();
+        renderCarrinho();
+    </script>
+</body>
+</html>
